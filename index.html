@@ -3,37 +3,86 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Didier Daloze Photographie — photographie animalière, nature, orages et séries photographiques.">
+  <meta name="description" content="Didier Daloze Photographie — photographie animalière, paysages, orages et séries photographiques.">
   <meta name="theme-color" content="#111111">
   <title>Didier Daloze Photographie</title>
   <link rel="stylesheet" href="assets/css/style.css">
   <style>
     .gallery {
-      grid-template-columns: repeat(auto-fit, minmax(200px, max-content));
-      align-items: start;
-      justify-content: center;
+      display: block;
     }
+
+    .orientation-group + .orientation-group {
+      margin-top: 4rem;
+    }
+
+    .orientation-title {
+      margin: 0 0 1.2rem;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .orientation-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
     .photo-card,
     .photo-card:nth-child(5n+1),
     .photo-card:nth-child(5n+4) {
-      width: fit-content;
-      max-width: 100%;
-      justify-self: center;
+      position: relative;
+      width: auto;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      cursor: zoom-in;
     }
+
     .photo-card img {
       display: block;
-      width: auto !important;
+      width: 100% !important;
       height: auto !important;
       max-width: 100%;
-      max-height: none;
       object-fit: contain;
+      -webkit-user-drag: none;
+      -webkit-touch-callout: none;
+      user-select: none;
     }
+
     .lightbox img {
       width: auto !important;
       height: auto !important;
-      max-width: min(96vw, 100%);
+      max-width: 96vw;
       max-height: 86vh;
       object-fit: contain;
+      -webkit-user-drag: none;
+      -webkit-touch-callout: none;
+      user-select: none;
+    }
+
+    @media (max-width: 620px) {
+      .orientation-grid {
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .orientation-grid-landscape .photo-card {
+        flex-basis: 100% !important;
+        max-width: 100% !important;
+      }
+
+      .orientation-grid-portrait .photo-card {
+        flex-basis: 280px !important;
+        max-width: min(100%, 300px) !important;
+      }
     }
   </style>
 </head>
@@ -77,19 +126,19 @@
           <p class="eyebrow">Portfolio</p>
           <h2>Galeries</h2>
         </div>
-        <p class="section-intro">Le site est conçu pour accueillir les images originales en pleine largeur, avec navigation par série et ouverture en grand format.</p>
+        <p class="section-intro">Le site est conçu pour accueillir les images originales avec leur cadrage, avec navigation par série et ouverture en grand format.</p>
       </div>
 
       <div class="filters" role="group" aria-label="Filtrer les photos">
         <button class="filter is-active" data-filter="all" type="button">Toutes</button>
         <button class="filter" data-filter="felins" type="button">Félins</button>
-        <button class="filter" data-filter="nature" type="button">Nature</button>
+        <button class="filter" data-filter="paysage" type="button">Paysages</button>
         <button class="filter" data-filter="orages" type="button">Orages</button>
         <button class="filter" data-filter="costumes" type="button">Costumes</button>
       </div>
 
       <div id="gallery" class="gallery" aria-live="polite"></div>
-      <p id="gallery-empty" class="gallery-empty" hidden>Les photos seront ajoutées ici à partir de tes fichiers originaux.</p>
+      <p id="gallery-empty" class="gallery-empty" hidden>Aucune photo dans cette galerie pour le moment.</p>
     </section>
 
     <section id="apropos" class="section section-split">
