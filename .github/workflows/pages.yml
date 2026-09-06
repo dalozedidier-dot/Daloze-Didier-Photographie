@@ -25,6 +25,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Inspect social image
+        run: |
+          echo "--- FILE ---"
+          file assets/og-image.jpg
+          echo "--- SIZE ---"
+          ls -lh assets/og-image.jpg
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
@@ -36,3 +43,11 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify published page and social image
+        run: |
+          sleep 5
+          echo "--- PAGE HEADERS ---"
+          curl -sSIL --max-time 20 https://dalozedidier-dot.github.io/Daloze-Didier-Photographie/ | sed -n '1,20p'
+          echo "--- IMAGE HEADERS ---"
+          curl -sSIL --max-time 20 https://dalozedidier-dot.github.io/Daloze-Didier-Photographie/assets/og-image.jpg | sed -n '1,30p'
