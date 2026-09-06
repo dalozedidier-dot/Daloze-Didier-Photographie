@@ -1,0 +1,21 @@
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Originaux photo : ne jamais publier par erreur
+originals/
+raw/
+RAW/
+*.nef
+*.NEF
+*.cr2
+*.CR2
+*.arw
+*.ARW
+*.dng
+*.DNG
+
+# Archives
+*.zip

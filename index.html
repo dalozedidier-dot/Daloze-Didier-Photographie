@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Didier Daloze Photographie — photographie animalière, nature, orages et séries photographiques.">
+  <meta name="theme-color" content="#111111">
+  <title>Didier Daloze Photographie</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <header class="site-header">
+    <a class="brand" href="#accueil" aria-label="Didier Daloze Photographie">
+      <span class="brand-main">DIDIER DALOZE</span>
+      <span class="brand-sub">PHOTOGRAPHIE</span>
+    </a>
+
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+      Menu
+    </button>
+
+    <nav id="site-nav" class="site-nav" aria-label="Navigation principale">
+      <a href="#galeries">Galeries</a>
+      <a href="#apropos">À propos</a>
+      <a href="#tirages">Tirages</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="contenu">
+    <section id="accueil" class="hero">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <p class="eyebrow">Photographie · Belgique</p>
+        <h1>Regarder plus longtemps.</h1>
+        <p class="hero-copy">
+          Une photographie centrée sur le vivant, l’atmosphère et ces instants
+          où un regard, une lumière ou un ciel suffisent à raconter quelque chose.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#galeries">Voir les galeries</a>
+          <a class="button button-ghost" href="#tirages">Tirages bientôt disponibles</a>
+        </div>
+      </div>
+      <div class="hero-signature" aria-hidden="true">DD</div>
+    </section>
+
+    <section id="galeries" class="section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Portfolio</p>
+          <h2>Galeries</h2>
+        </div>
+        <p class="section-intro">
+          Le site est conçu pour accueillir les images originales en pleine largeur,
+          avec navigation par série et ouverture en grand format.
+        </p>
+      </div>
+
+      <div class="filters" role="group" aria-label="Filtrer les photos">
+        <button class="filter is-active" data-filter="all" type="button">Toutes</button>
+        <button class="filter" data-filter="felins" type="button">Félins</button>
+        <button class="filter" data-filter="nature" type="button">Nature</button>
+        <button class="filter" data-filter="orages" type="button">Orages</button>
+        <button class="filter" data-filter="costumes" type="button">Costumes</button>
+      </div>
+
+      <div id="gallery" class="gallery" aria-live="polite"></div>
+      <p id="gallery-empty" class="gallery-empty" hidden>
+        Les photos seront ajoutées ici à partir de tes fichiers originaux.
+      </p>
+    </section>
+
+    <section id="apropos" class="section section-split">
+      <div>
+        <p class="eyebrow">Le photographe</p>
+        <h2>À propos</h2>
+      </div>
+      <div class="prose">
+        <p>
+          La photographie n’est pas seulement une collection d’images. C’est une manière
+          de laisser une scène respirer assez longtemps pour qu’elle montre autre chose
+          que sa première impression.
+        </p>
+        <p>
+          Ce site a vocation à rassembler des séries photographiques dans un espace
+          volontairement sobre, où l’image reste l’élément principal.
+        </p>
+      </div>
+    </section>
+
+    <section id="tirages" class="section sales">
+      <div class="sales-card">
+        <p class="eyebrow">Boutique · Phase 2</p>
+        <h2>Des photographies qui peuvent quitter l’écran.</h2>
+        <p>
+          La future boutique pourra proposer des tirages, formats limités et licences
+          d’utilisation. Le catalogue est déjà prévu dans l’architecture du site.
+        </p>
+
+        <div class="sales-grid">
+          <article>
+            <span class="number">01</span>
+            <h3>Tirages</h3>
+            <p>Formats, papier, finitions et séries numérotées.</p>
+          </article>
+          <article>
+            <span class="number">02</span>
+            <h3>Licences</h3>
+            <p>Usage éditorial ou professionnel avec conditions claires.</p>
+          </article>
+          <article>
+            <span class="number">03</span>
+            <h3>Commande</h3>
+            <p>Paiement sécurisé via un prestataire externe, sans stocker de carte sur le site.</p>
+          </article>
+        </div>
+
+        <span class="coming-soon">Boutique en préparation</span>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact">
+      <p class="eyebrow">Contact</p>
+      <h2>Une image, un tirage, une collaboration.</h2>
+      <div class="contact-links">
+        <a href="https://www.facebook.com/DalozeDidierPhotographie/" target="_blank" rel="noreferrer">
+          Facebook
+        </a>
+        <a href="mailto:contact@ori-c.be">contact@ori-c.be</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> Didier Daloze Photographie.</p>
+    <p>Toutes les photographies restent protégées par le droit d’auteur.</p>
+  </footer>
+
+  <dialog id="lightbox" class="lightbox">
+    <button id="lightbox-close" class="lightbox-close" type="button" aria-label="Fermer">×</button>
+    <figure>
+      <img id="lightbox-image" src="" alt="">
+      <figcaption id="lightbox-caption"></figcaption>
+    </figure>
+  </dialog>
+
+  <script src="assets/data/photos.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
