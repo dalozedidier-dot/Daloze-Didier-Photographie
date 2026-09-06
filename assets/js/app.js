@@ -17,12 +17,25 @@ let renderVersion = 0;
 
 document.querySelector("#year").textContent = new Date().getFullYear();
 
-// Protection légère : décourage l'enregistrement direct, sans prétendre empêcher
-// techniquement la récupération d'une image publique.
-document.addEventListener("contextmenu", (event) => event.preventDefault());
+// Blocage du menu contextuel et du glisser-déposer.
+function blockContextMenu(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  return false;
+}
+
+window.addEventListener("contextmenu", blockContextMenu, true);
+document.addEventListener("contextmenu", blockContextMenu, true);
+document.documentElement.oncontextmenu = () => false;
+if (document.body) document.body.oncontextmenu = () => false;
+
+window.addEventListener("mousedown", (event) => {
+  if (event.button === 2) event.preventDefault();
+}, true);
+
 document.addEventListener("dragstart", (event) => {
   if (event.target instanceof HTMLImageElement) event.preventDefault();
-});
+}, true);
 
 menuToggle?.addEventListener("click", () => {
   const open = nav.classList.toggle("is-open");
@@ -42,10 +55,24 @@ function getPhotoInfo(photo) {
   const promise = new Promise((resolve) => {
     const probe = new Image();
     probe.onload = () => {
-      const ratio = probe.naturalWidth / probe.naturalHeight;
-      resolve({ photo, ratio, orientation: ratio >= 1 ? "landscape" : "portrait" });
+      const width = probe.naturalWidth || 1;
+      const height = probe.naturalHeight || 1;
+      const ratio = width / height;
+      resolve({
+        photo,
+        width,
+        height,
+        ratio,
+        orientation: ratio >= 1 ? "landscape" : "portrait"
+      });
     };
-    probe.onerror = () => resolve({ photo, ratio: 1, orientation: "landscape" });
+    probe.onerror = () => resolve({
+      photo,
+      width: 1,
+      height: 1,
+      ratio: 1,
+      orientation: "landscape"
+    });
     probe.src = photo.src;
   });
 
@@ -53,17 +80,21 @@ function getPhotoInfo(photo) {
   return promise;
 }
 
+function getThumbnailWidth(info) {
+  // On garde une taille compacte et le ratio réel de l'image.
+  if (info.orientation === "landscape") {
+    return Math.round(Math.max(175, Math.min(info.ratio * 138, 285)));
+  }
+
+  return Math.round(Math.max(135, Math.min(info.ratio * 215, 195)));
+}
+
 function createPhotoCard(info) {
-  const { photo, ratio, orientation } = info;
+  const { photo, orientation } = info;
   const article = document.createElement("article");
   article.className = `photo-card photo-card-${orientation}`;
   article.dataset.category = photo.category;
-
-  const safeRatio = Math.max(0.35, Math.min(ratio, 3));
-  const targetHeight = orientation === "landscape" ? 190 : 330;
-  article.style.flexGrow = safeRatio.toFixed(4);
-  article.style.flexBasis = `${Math.round(safeRatio * targetHeight)}px`;
-  article.style.maxWidth = orientation === "landscape" ? "460px" : "300px";
+  article.style.width = `${getThumbnailWidth(info)}px`;
 
   const img = document.createElement("img");
   img.src = photo.src;
@@ -71,6 +102,7 @@ function createPhotoCard(info) {
   img.loading = "lazy";
   img.decoding = "async";
   img.draggable = false;
+  img.oncontextmenu = () => false;
 
   const meta = document.createElement("div");
   meta.className = "photo-meta";
@@ -86,6 +118,7 @@ function createPhotoCard(info) {
     lightboxImage.src = photo.src;
     lightboxImage.alt = img.alt;
     lightboxImage.draggable = false;
+    lightboxImage.oncontextmenu = () => false;
     lightboxCaption.textContent = [photo.title, photo.categoryLabel, photo.year]
       .filter(Boolean)
       .join(" · ");
@@ -108,7 +141,10 @@ function createOrientationGroup(title, orientation, items) {
   const row = document.createElement("div");
   row.className = `orientation-grid orientation-grid-${orientation}`;
 
-  items.forEach((item) => row.appendChild(createPhotoCard(item)));
+  // Les tailles proches restent ensemble au lieu de créer une ligne chaotique.
+  const sorted = [...items].sort((a, b) => getThumbnailWidth(b) - getThumbnailWidth(a));
+  sorted.forEach((item) => row.appendChild(createPhotoCard(item)));
+
   section.append(heading, row);
   return section;
 }
