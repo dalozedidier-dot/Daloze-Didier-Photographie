@@ -43,11 +43,7 @@ function getPhotoInfo(photo) {
     const probe = new Image();
     probe.onload = () => {
       const ratio = probe.naturalWidth / probe.naturalHeight;
-      resolve({
-        photo,
-        ratio,
-        orientation: ratio >= 1 ? "landscape" : "portrait"
-      });
+      resolve({ photo, ratio, orientation: ratio >= 1 ? "landscape" : "portrait" });
     };
     probe.onerror = () => resolve({ photo, ratio: 1, orientation: "landscape" });
     probe.src = photo.src;
@@ -62,7 +58,12 @@ function createPhotoCard(info) {
   const article = document.createElement("article");
   article.className = `photo-card photo-card-${orientation}`;
   article.dataset.category = photo.category;
-  article.style.setProperty("--ratio", Math.max(0.35, Math.min(ratio, 3)).toFixed(4));
+
+  const safeRatio = Math.max(0.35, Math.min(ratio, 3));
+  const targetHeight = orientation === "landscape" ? 190 : 330;
+  article.style.flexGrow = safeRatio.toFixed(4);
+  article.style.flexBasis = `${Math.round(safeRatio * targetHeight)}px`;
+  article.style.maxWidth = orientation === "landscape" ? "460px" : "300px";
 
   const img = document.createElement("img");
   img.src = photo.src;
