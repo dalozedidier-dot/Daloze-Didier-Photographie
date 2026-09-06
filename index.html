@@ -13,11 +13,11 @@
     }
 
     .orientation-group + .orientation-group {
-      margin-top: 4rem;
+      margin-top: 3rem;
     }
 
     .orientation-title {
-      margin: 0 0 1.2rem;
+      margin: 0 0 1rem;
       color: var(--muted);
       font-family: inherit;
       font-size: .72rem;
@@ -30,14 +30,15 @@
       display: flex;
       flex-wrap: wrap;
       align-items: flex-start;
-      gap: 14px;
+      justify-content: flex-start;
+      gap: 12px;
     }
 
     .photo-card,
     .photo-card:nth-child(5n+1),
     .photo-card:nth-child(5n+4) {
       position: relative;
-      width: auto;
+      flex: 0 0 auto;
       min-width: 0;
       min-height: 0;
       overflow: hidden;
@@ -50,7 +51,6 @@
       display: block;
       width: 100% !important;
       height: auto !important;
-      max-width: 100%;
       object-fit: contain;
       -webkit-user-drag: none;
       -webkit-touch-callout: none;
@@ -70,23 +70,24 @@
 
     @media (max-width: 620px) {
       .orientation-grid {
-        justify-content: center;
-        gap: 10px;
+        gap: 8px;
       }
 
-      .orientation-grid-landscape .photo-card {
-        flex-basis: 100% !important;
-        max-width: 100% !important;
+      .photo-meta {
+        padding: .7rem;
       }
 
-      .orientation-grid-portrait .photo-card {
-        flex-basis: 280px !important;
-        max-width: min(100%, 300px) !important;
+      .photo-title {
+        font-size: .8rem;
+      }
+
+      .photo-category {
+        font-size: .62rem;
       }
     }
   </style>
 </head>
-<body>
+<body oncontextmenu="return false;" ondragstart="return false;">
   <a class="skip-link" href="#contenu">Aller au contenu</a>
 
   <header class="site-header">
@@ -198,7 +199,7 @@
   <dialog id="lightbox" class="lightbox">
     <button id="lightbox-close" class="lightbox-close" type="button" aria-label="Fermer">×</button>
     <figure>
-      <img id="lightbox-image" src="" alt="">
+      <img id="lightbox-image" src="" alt="" draggable="false" oncontextmenu="return false;">
       <figcaption id="lightbox-caption"></figcaption>
     </figure>
   </dialog>
