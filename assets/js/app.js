@@ -8,7 +8,9 @@ const lightboxImage = document.querySelector("#lightbox-image");
 const lightboxCaption = document.querySelector("#lightbox-caption");
 const lightboxClose = document.querySelector("#lightbox-close");
 
-const photos = Array.isArray(window.PHOTO_DATA) ? window.PHOTO_DATA : [];
+const photos = Array.isArray(window.PHOTO_DATA)
+  ? window.PHOTO_DATA.filter((photo) => !String(photo.src || "").startsWith("data:image/"))
+  : [];
 
 document.querySelector("#year").textContent = new Date().getFullYear();
 
