@@ -25,16 +25,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Setup Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.x'
-
-      - name: Build social sharing image
-        run: |
-          python -m pip install --disable-pip-version-check pillow
-          python scripts/build_og_image.py
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
