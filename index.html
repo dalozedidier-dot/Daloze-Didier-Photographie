@@ -7,6 +7,36 @@
   <meta name="theme-color" content="#111111">
   <title>Didier Daloze Photographie</title>
   <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* Ne jamais agrandir une image au-delà de sa taille intrinsèque. */
+    .gallery {
+      grid-template-columns: repeat(auto-fit, minmax(200px, max-content));
+      align-items: start;
+      justify-content: center;
+    }
+    .photo-card,
+    .photo-card:nth-child(5n+1),
+    .photo-card:nth-child(5n+4) {
+      width: fit-content;
+      max-width: 100%;
+      justify-self: center;
+    }
+    .photo-card img {
+      display: block;
+      width: auto !important;
+      height: auto !important;
+      max-width: 100%;
+      max-height: none;
+      object-fit: contain;
+    }
+    .lightbox img {
+      width: auto !important;
+      height: auto !important;
+      max-width: min(96vw, 100%);
+      max-height: 86vh;
+      object-fit: contain;
+    }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#contenu">Aller au contenu</a>
