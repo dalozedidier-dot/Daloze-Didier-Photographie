@@ -1,33 +1,23 @@
+const felinIds = [
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+  17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 33
+];
+
+const paysageIds = Array.from({ length: 31 }, (_, index) => index + 1);
+
 window.PHOTO_DATA = [
-  { src: "F%C3%A9lins/1.jpg", title: "Félin 01", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 01" },
-  { src: "F%C3%A9lins/2.jpg", title: "Félin 02", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 02" },
-  { src: "F%C3%A9lins/3.jpg", title: "Félin 03", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 03" },
-  { src: "F%C3%A9lins/4.jpg", title: "Félin 04", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 04" },
-  { src: "F%C3%A9lins/5.jpg", title: "Félin 05", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 05" },
-  { src: "F%C3%A9lins/6.jpg", title: "Félin 06", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 06" },
-  { src: "F%C3%A9lins/7.jpg", title: "Félin 07", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 07" },
-  { src: "F%C3%A9lins/8.jpg", title: "Félin 08", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 08" },
-  { src: "F%C3%A9lins/9.jpg", title: "Félin 09", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 09" },
-  { src: "F%C3%A9lins/10.jpg", title: "Félin 10", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 10" },
-  { src: "F%C3%A9lins/11.jpg", title: "Félin 11", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 11" },
-  { src: "F%C3%A9lins/12.jpg", title: "Félin 12", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 12" },
-  { src: "F%C3%A9lins/13.jpg", title: "Félin 13", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 13" },
-  { src: "F%C3%A9lins/14.jpg", title: "Félin 14", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 14" },
-  { src: "F%C3%A9lins/15.jpg", title: "Félin 15", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 15" },
-  { src: "F%C3%A9lins/16.jpg", title: "Félin 16", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 16" },
-  { src: "F%C3%A9lins/17.jpg", title: "Félin 17", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 17" },
-  { src: "F%C3%A9lins/18.jpg", title: "Félin 18", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 18" },
-  { src: "F%C3%A9lins/19.jpg", title: "Félin 19", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 19" },
-  { src: "F%C3%A9lins/20.jpg", title: "Félin 20", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 20" },
-  { src: "F%C3%A9lins/21.jpg", title: "Félin 21", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 21" },
-  { src: "F%C3%A9lins/22.jpg", title: "Félin 22", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 22" },
-  { src: "F%C3%A9lins/23.jpg", title: "Félin 23", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 23" },
-  { src: "F%C3%A9lins/24.jpg", title: "Félin 24", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 24" },
-  { src: "F%C3%A9lins/26.jpg", title: "Félin 26", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 26" },
-  { src: "F%C3%A9lins/27.jpg", title: "Félin 27", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 27" },
-  { src: "F%C3%A9lins/28.jpg", title: "Félin 28", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 28" },
-  { src: "F%C3%A9lins/29.jpg", title: "Félin 29", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 29" },
-  { src: "F%C3%A9lins/30.jpg", title: "Félin 30", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 30" },
-  { src: "F%C3%A9lins/31.jpg", title: "Félin 31", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 31" },
-  { src: "F%C3%A9lins/32.jpg", title: "Félin 32", category: "felins", categoryLabel: "Félins", alt: "Photographie de félin 32" }
+  ...felinIds.map((id) => ({
+    src: `F%C3%A9lins/${id}.jpg`,
+    title: `Félin ${String(id).padStart(2, "0")}`,
+    category: "felins",
+    categoryLabel: "Félins",
+    alt: `Photographie de félin ${String(id).padStart(2, "0")}`
+  })),
+  ...paysageIds.map((id) => ({
+    src: `Paysage/${id}.jpg`,
+    title: `Paysage ${String(id).padStart(2, "0")}`,
+    category: "paysage",
+    categoryLabel: "Paysages",
+    alt: `Photographie de paysage ${String(id).padStart(2, "0")}`
+  }))
 ];
