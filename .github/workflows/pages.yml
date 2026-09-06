@@ -42,8 +42,6 @@ jobs:
           html = html.replace('<meta property="og:image:height" content="630">', '<meta property="og:image:height" content="907">')
           p.write_text(html, encoding='utf-8')
           PY
-          echo "--- DEPLOYED OG TAGS ---"
-          grep -E 'og:image|twitter:image' index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -57,10 +55,15 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Verify published social preview files
+      - name: Verify Facebook crawler access
         run: |
           sleep 5
-          echo "--- LIVE OG TAGS ---"
-          curl -sS --max-time 20 https://dalozedidier-dot.github.io/Daloze-Didier-Photographie/ | grep -E 'og:image|twitter:image'
-          echo "--- NEW IMAGE HEADERS ---"
-          curl -sSIL --max-time 20 https://dalozedidier-dot.github.io/Daloze-Didier-Photographie/assets/partage-didier-daloze-20260906.jpg | sed -n '1,30p'
+          FB_UA='facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)'
+          SITE='https://dalozedidier-dot.github.io/Daloze-Didier-Photographie/'
+          IMG='https://dalozedidier-dot.github.io/Daloze-Didier-Photographie/assets/partage-didier-daloze-20260906.jpg'
+          echo '--- FACEBOOK PAGE HEADERS ---'
+          curl -A "$FB_UA" -sSIL --max-time 20 "$SITE" | sed -n '1,25p'
+          echo '--- FACEBOOK SEES THESE OG TAGS ---'
+          curl -A "$FB_UA" -sS --max-time 20 "$SITE" | grep -E 'og:(title|description|url|image)|twitter:image'
+          echo '--- FACEBOOK IMAGE HEADERS ---'
+          curl -A "$FB_UA" -sSIL --max-time 20 "$IMG" | sed -n '1,30p'
