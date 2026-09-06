@@ -12,7 +12,17 @@ const photos = Array.isArray(window.PHOTO_DATA)
   ? window.PHOTO_DATA.filter((photo) => !String(photo.src || "").startsWith("data:image/"))
   : [];
 
+const imageInfoCache = new Map();
+let renderVersion = 0;
+
 document.querySelector("#year").textContent = new Date().getFullYear();
+
+// Protection légère : décourage l'enregistrement direct, sans prétendre empêcher
+// techniquement la récupération d'une image publique.
+document.addEventListener("contextmenu", (event) => event.preventDefault());
+document.addEventListener("dragstart", (event) => {
+  if (event.target instanceof HTMLImageElement) event.preventDefault();
+});
 
 menuToggle?.addEventListener("click", () => {
   const open = nav.classList.toggle("is-open");
@@ -26,16 +36,40 @@ nav?.querySelectorAll("a").forEach((link) => {
   });
 });
 
-function createPhotoCard(photo) {
+function getPhotoInfo(photo) {
+  if (imageInfoCache.has(photo.src)) return imageInfoCache.get(photo.src);
+
+  const promise = new Promise((resolve) => {
+    const probe = new Image();
+    probe.onload = () => {
+      const ratio = probe.naturalWidth / probe.naturalHeight;
+      resolve({
+        photo,
+        ratio,
+        orientation: ratio >= 1 ? "landscape" : "portrait"
+      });
+    };
+    probe.onerror = () => resolve({ photo, ratio: 1, orientation: "landscape" });
+    probe.src = photo.src;
+  });
+
+  imageInfoCache.set(photo.src, promise);
+  return promise;
+}
+
+function createPhotoCard(info) {
+  const { photo, ratio, orientation } = info;
   const article = document.createElement("article");
-  article.className = "photo-card";
+  article.className = `photo-card photo-card-${orientation}`;
   article.dataset.category = photo.category;
+  article.style.setProperty("--ratio", Math.max(0.35, Math.min(ratio, 3)).toFixed(4));
 
   const img = document.createElement("img");
   img.src = photo.src;
   img.alt = photo.alt || photo.title || "Photographie";
   img.loading = "lazy";
   img.decoding = "async";
+  img.draggable = false;
 
   const meta = document.createElement("div");
   meta.className = "photo-meta";
@@ -50,6 +84,7 @@ function createPhotoCard(photo) {
     if (!lightbox?.showModal) return;
     lightboxImage.src = photo.src;
     lightboxImage.alt = img.alt;
+    lightboxImage.draggable = false;
     lightboxCaption.textContent = [photo.title, photo.categoryLabel, photo.year]
       .filter(Boolean)
       .join(" · ");
@@ -59,42 +94,49 @@ function createPhotoCard(photo) {
   return article;
 }
 
-function render(filter = "all") {
-  gallery.innerHTML = "";
+function createOrientationGroup(title, orientation, items) {
+  if (!items.length) return null;
 
-  if (!photos.length) {
-    emptyState.hidden = true;
-    renderDemo();
-    return;
-  }
+  const section = document.createElement("section");
+  section.className = "orientation-group";
+
+  const heading = document.createElement("h3");
+  heading.className = "orientation-title";
+  heading.textContent = title;
+
+  const row = document.createElement("div");
+  row.className = `orientation-grid orientation-grid-${orientation}`;
+
+  items.forEach((item) => row.appendChild(createPhotoCard(item)));
+  section.append(heading, row);
+  return section;
+}
+
+async function render(filter = "all") {
+  const currentRender = ++renderVersion;
+  gallery.innerHTML = "";
 
   const visible = filter === "all"
     ? photos
     : photos.filter((photo) => photo.category === filter);
 
-  visible.forEach((photo) => gallery.appendChild(createPhotoCard(photo)));
-  emptyState.hidden = visible.length !== 0;
-}
+  if (!visible.length) {
+    emptyState.hidden = false;
+    return;
+  }
 
-function renderDemo() {
-  const demos = [
-    ["Félins", "Portraits et regards"],
-    ["Nature", "Paysages et détails"],
-    ["Orages", "Lumière et atmosphère"],
-    ["Costumes", "Séries et personnages"]
-  ];
+  emptyState.hidden = true;
+  const loaded = await Promise.all(visible.map(getPhotoInfo));
+  if (currentRender !== renderVersion) return;
 
-  demos.forEach(([title, subtitle]) => {
-    const card = document.createElement("article");
-    card.className = "demo-card";
-    card.innerHTML = `
-      <div>
-        <span class="demo-label">${escapeHtml(subtitle)}</span>
-        <h3>${escapeHtml(title)}</h3>
-      </div>
-    `;
-    gallery.appendChild(card);
-  });
+  const landscapes = loaded.filter((item) => item.orientation === "landscape");
+  const portraits = loaded.filter((item) => item.orientation === "portrait");
+
+  const landscapeGroup = createOrientationGroup("Format paysage", "landscape", landscapes);
+  const portraitGroup = createOrientationGroup("Format portrait", "portrait", portraits);
+
+  if (landscapeGroup) gallery.appendChild(landscapeGroup);
+  if (portraitGroup) gallery.appendChild(portraitGroup);
 }
 
 filters.forEach((button) => {
